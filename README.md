@@ -34,6 +34,7 @@ Each folder will include:
 - Solution walkthroughs
 - Key technical notes
 - Scripts or tools developed
+- Python scripts for pasword cracking
 
 ---
 
