@@ -1,39 +1,46 @@
 # Malicious Shared Object
 
 ## Overview
-This project demonstrates how a crafted shared object (`.so` file) can be used to exfiltrate a protected file (`/flag`) upon dynamic loading.
+This project demonstrates how a crafted shared object (`.so` file) can be used to exfiltrate a protected file (`/flag`) upon dynamic loading using `LD_PRELOAD`.
 
-Two methods are showcased:
-- Basic `init()` function method
+Two techniques are showcased:
+- Basic `init()` method
 - Advanced `__attribute__((constructor))` method
-- **Optional**: Stealthier versions that self-delete after execution
+- Optional stealthier versions that self-delete after execution
 
-These techniques are commonly used in:
+These methods are commonly used in:
 - Capture The Flag (CTF) competitions
-- Binary exploitation scenarios
-- Red team post-exploitation phases
+- Binary exploitation
+- Red team post-exploitation activities
 
 ## Directory Structure
 ```plaintext
-Malicious-Shared-Object/
+
+malicious-shared-object/
 ├── basic-init-method/
 │   ├── myplugin.c             # Normal version
-│   ├── myplugin_stealth.c      # Stealth version (self-deleting)
-│   ├── build_and_run.sh        # Build and execute script
+│   ├── myplugin_stealth.c      # Stealth version (self-deletes)
+│   ├── build_and_run.sh
 ├── constructor-method/
 │   ├── myplugin.c             # Normal version
-│   ├── myplugin_stealth.c      # Stealth version (self-deleting)
-│   ├── build_and_run.sh        # Build and execute script
-├── README.md                   # Project documentation
+│   ├── myplugin_stealth.c      # Stealth version (self-deletes)
+│   ├── build_and_run.sh
+├── README.md
+
 
 ## How to Build and Run
-cd Malicious-Shared-Object/basic-init-method
+cd malicious-shared-object/basic-init-method
 # OR
-cd Malicious-Shared-Object/constructor-method
-chmod +x build_and_run.sh
-./build_and_run.sh
+cd malicious-shared-object/constructor-method
 
+##Make the build script executable (only needed once)
+chmod +x build_and_run.sh
+##Build and Run the Normal Payload
+./build_and_run.sh
+##Build and Run the Stealth (Self-Deleting) Payload
 ./build_and_run.sh stealth
+##Cleanup (Optional)
+rm -f /tmp/*.so
 
 cd Malicious-Shared-Object/basic-init-method
 chmod +x build_and_run.sh
@@ -54,14 +61,8 @@ chmod +x build_and_run.sh
 ---
 
 # 🛠 **Quick Upload Checklist for GitHub**
-
-1. Copy the full folder structure (`Malicious-Shared-Object/`) into your `Cybersecurity Vault` local folder.
-2. Copy the `README.md` (the one above).
-3. Stage and push to GitHub:
-
-```bash
 cd Cybersecurity-Vault
 git add Malicious-Shared-Object
-git commit -m "Added Malicious Shared Object  (normal and stealth versions)"
+git commit -m "Added Malicious Shared Object (normal and stealth versions, fully portable)"
 git push origin main
 
