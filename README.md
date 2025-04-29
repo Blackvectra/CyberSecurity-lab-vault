@@ -1,4 +1,4 @@
-# CyberSecurity-lab-vault
+# CyberSecurity-vault
 "A curated collection of cybersecurity labs, CTF solutions, and penetration testing projects."
 
 > Repository maintained by Blackvectra
@@ -20,8 +20,10 @@ It is designed to demonstrate professional growth, technical skills, and hands-o
 - Binary Exploitation
 - Cryptography Challenges
 - Forensic Investigations
-- CTF Solutions (NCL, PicoCTF, HackTheBox, etc.)
-
+- Active Directory Pentestion
+- Ethical Hacking documents
+- CTF Solutions (NCL, etc.)
+- Everyday scripts ( cleanup.bat, 
 ---
 
 ## Repository Structure
