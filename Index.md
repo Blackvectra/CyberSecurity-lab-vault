@@ -51,6 +51,4 @@ It is curated and maintained by [blackvectra](https://github.com/blackvectra) as
 ---
 
 ## 📌 Status
-![GitHub last commit](https://img.shields.io/github/last-commit/blackvectra/NextLayerSec)
-![License](https://img.shields.io/github/license/blackvectra/NextLayerSec)
 ![Maintained](https://img.shields.io/badge/Maintained-Yes-brightgreen)
