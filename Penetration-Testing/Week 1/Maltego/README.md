@@ -1,163 +1,160 @@
-# Maltego — OSINT & Footprinting README (CE‑Friendly)
+# Maltego — Overview & Field Guide
 
-A copy‑paste guide you can drop into a repo or wiki to help students and analysts install **Maltego**, set it up, and run practical OSINT footprinting tasks—especially with the free **Community Edition (CE)**.
-
-> Purpose: turn Maltego into a repeatable workflow (not a one‑off demo).
+A concise, copy‑paste README that explains **what Maltego is**, when to use it, key concepts (entities, transforms, machines), common workflows, and practical tips. Drop this into a repo/wiki to brief students or teammates.
 
 ---
 
 ## What is Maltego?
 
-**Maltego** is a graph‑based OSINT tool that runs **transforms** (queries) against data sources (DNS, search engines, social, paste sites, etc.) and visualizes **entities** (domains, IPs, people, emails, companies, infrastructure) and their relationships. You can chain transforms into **machines** to automate common tasks.
+**Maltego** is a graph‑based OSINT and link‑analysis tool. It lets you pivot across public and commercial data sources using **transforms** (scripted queries) and visualize relationships between **entities** (domains, IPs, people, emails, companies, infrastructure, etc.). Investigators use it for:
+- **Footprinting & infrastructure mapping** (DNS, IPs, netblocks, certs, tech stacks)
+- **Person/brand protection** (emails, usernames, social profiles, breaches)
+- **Threat intel enrichment** (IOCs → whois, passive DNS, CT logs, open sources)
+- **Incident scoping** (pivot from a phish URL, malware hash, C2 host, etc.)
+
+> Think: one workspace where you can *see* pivots and evidence as a graph.
 
 ---
 
-## Prerequisites
+## Where Maltego Fits (Use Cases)
 
-- A Maltego account (free **CE** or paid editions).  
-- Internet access for transforms.  
-- (Optional) API keys for 3rd‑party data sources (Shodan, Have I Been Pwned, etc.).
+- **Blue team / DFIR:** Expand IOCs, find related domains/IPs, spot shared certs.  
+- **Threat intel:** Enrich indicators, cluster infrastructure, track campaigns.  
+- **OSINT investigations:** People/org lookups, surface‑web link‑analysis.  
+- **Brand/security research:** Typosquat discovery, external attack surface snapshots.  
 
----
-
-## Install
-
-### Kali Linux
-```bash
-sudo apt update
-sudo apt install maltego
-# Launch from menu: Applications → Information Gathering → Maltego
-# or run:
-maltego
-```
-
-### Windows / macOS
-- Download the installer from **maltego.com** and follow the prompts.
-- Launch **Maltego CE** on first run if prompted to choose an edition.
+Maltego complements tools like **Shodan**, **VirusTotal**, **Ghidra**, **Kibana**, **ATT&CK Navigator** by focusing on **relationship discovery** and **visual reasoning**.
 
 ---
 
-## First‑Run Setup (CE)
+## Key Concepts
 
-1. **Accept License** → choose **Maltego CE (Free)** if asked.  
-2. **Create/Login** with your Maltego ID (email + password).  
-3. Allow the installer to fetch **transforms/entities/machines**.  
-4. Choose **Normal privacy mode** (CE requires internet lookups).  
-5. Pick a browser (system default is fine).  
-6. Finish setup — you’ll land on the **Home** screen.
-
-> Terms:
-> - **Transform** = a scripted query against a data source.  
-> - **Entity** = a node (domain, IP, person, email, etc.).  
-> - **Machine** = a prebuilt transform chain that automates a task.
+- **Entity:** A node on the graph (e.g., *Domain, IP Address, Person, Email Address, URL, SSL Certificate, Netblock, Organization, Username*). Entities carry **properties** (e.g., FQDN, ASN, registrant).  
+- **Transform:** A query that **pivots** from one entity to another (e.g., *Domain → To DNS Records*, *IP → To Domains (Reverse DNS)*). Transforms can be free or require API keys.  
+- **Machine:** A prebuilt **workflow** that chains transforms (e.g., *Footprint L1*).  
+- **Transform Hub:** Catalog of transform providers. Install/enable sources here.  
+- **Graph & Views:** Layouts (hierarchical, organic), filters, grouping/collections, and visual styles that make large graphs manageable.  
+- **Evidence:** Each transform adds **detail** (source, timestamp, parameters). Use the **Detail**/**Properties** panes to keep investigative notes.
 
 ---
 
-## Quickstart: Domain Footprinting (Footprint L1 CE)
+## Editions & Access (High‑Level)
 
-Goal: build a basic footprint of a target domain using only CE‑friendly transforms.
+- **Community Edition (CE)** — free, great for learning; rate/entity limits apply.  
+- **Paid Desktop** — higher limits, more features, commercial transforms allowed.  
+- **Enterprise/Server Options** — shared infrastructure, collaboration, on‑prem transform execution (privacy/scale).  
 
-1. **Create a new Graph** (Home → *New Graph*).  
-2. Go to **Machines** → **Run Machine** → select **Footprint L1 (CE)**.  
-3. When prompted for a **target**, enter your domain (e.g., `example.org`).  
-4. Run. CE may limit total entities; that’s normal.  
-5. Explore the graph:
-   - Zoom out/in, switch to **Hierarchical** layout.
-   - Right‑click interesting nodes (domain, DNS records, IPs) → run more transforms.
-6. Save the graph: **File → Save As** (`.mtgl`).
-
-**What you’ll typically see**
-- DNS records (A/AAAA/MX/NS/TXT), IP ranges, netblocks, related domains, URLs, sometimes discovered technologies and pages.
+> Names and features vary over time—pick CE to start, upgrade if you need scale or premium sources.
 
 ---
 
-## Quickstart: URL → Network & Domain Info
+## How Transforms Run (Privacy/Architecture)
 
-1. **Machines** → **Run Machine** → pick **URL To Network And Domain Information**.  
-2. Enter a full URL (e.g., `https://www.example.org`).  
-3. Run and review: domain, DNS, IPs, certificates, historical snapshots (try Wayback transforms on the domain).
-
----
-
-## Manual Transforms (Common Flow)
-
-You don’t need machines for everything. Try **right‑clicking** an entity and running transforms manually:
-
-- **Domain →** *To DNS Name*, *To DNS Records*, *To IP Address*, *To Netblocks*, *To MX/NS*  
-- **IP Address →** *To Domain / Reverse DNS*, *To Netblock*, *To Geo*  
-- **Person →** *To Email Addresses*, *To Social Profiles* (varies by data source)  
-- **Email Address →** *To Breaches* (if you have HIBP/other transforms), *To Social Profiles*  
-- **Website →** *To Pages*, *To Technologies*, *To External Links*
-
-> Tip: Pin **Most Used** transforms to speed up repetitive actions.
+- Most transforms execute via **remote providers** (your query → provider API → results back to the graph).  
+- You can run **local** or **self‑hosted transforms** for sensitive workflows.  
+- Access to some sources requires **API keys** you configure in the Transform Hub.  
+- CE is **internet‑dependent**; treat queries and targets with normal OSINT OPSEC.
 
 ---
 
-## Working Efficiently in CE (Rate/Limits)
+## Typical Workflows (Step‑By‑Step)
 
-- Expect **entity caps** and transform throttling; CE is for learning.  
-- Start small: one target, a few transforms at a time.  
-- Use **view filters** (upper‑right) to hide noise.  
-- **Entity Detail** pane shows source, properties, and transform evidence.  
-- Rename important nodes and **add notes** for reporting.  
-- Consider paid add‑ons/API keys if you need deeper sources.
+### A) Domain Footprint (External Attack Surface Snapshot)
+1. Create a **new graph**, add your authorized domain (e.g., `example.org`).  
+2. Run a footprint **machine** (e.g., *Footprint L1*).  
+3. Pivot: **Domain → DNS → IPs → Netblocks → Certificates → Related Domains**.  
+4. Tag/annotate interesting nodes (old subdomains, dev hosts, shared infra).  
+5. Export a **PNG** of the graph and a **CSV** of entities for tracking.
 
----
+### B) Person/Brand Pivot
+1. Start with a **Person** or **Email Address** entity.  
+2. Run transforms: **Email → Breaches**, **Email/Name → Social Profiles / Usernames** (provider‑dependent).  
+3. Cluster by platforms; add **Notes** and **bookmarks** on verified links.  
+4. Summarize findings and risks (impersonation, exposed creds).
 
-## Exporting & Reporting
-
-- **Graph** → export as **PNG/SVG/PDF** for slides or documentation.  
-- **Table View** → export entities to **CSV** (good for pivoting in spreadsheets).  
-- Save the working file as **`.mtgl`** so you can continue later.
-
----
-
-## Privacy, Legal & Ethics
-
-- Only investigate targets you **own/are authorized** to test or where OSINT is clearly permitted.  
-- Respect site **robots.txt** and API/service **terms of use**.  
-- Avoid high‑impact transforms on production during business hours.  
-- Log what you ran: target, transforms, timestamps, outcomes.
+### C) IOC Expansion (DFIR)
+1. Start with a **URL**, **Domain**, **IP**, **Hash**, or **SSL Cert**.  
+2. Run transforms to get **WHOIS, passive DNS, CT logs, related hosts/pages**.  
+3. Group nodes by **campaign/infrastructure** and record IOCs for blocking.  
+4. Export indicators (CSV) and a **graph view** for the incident report.
 
 ---
 
-## Troubleshooting
+## Working Smart in Graphs
 
-- **Transforms fail / time out** → check internet access, try fewer transforms, verify API keys.  
-- **Empty results** → CE limits, target has few public artifacts, or transforms not applicable. Try different pivots.  
-- **Login issues** → confirm Maltego ID/password, retry after a few minutes, or reinstall transforms from **Transform Hub**.
-
----
-
-## Appendix A — Keyboard Shortcuts (Essentials)
-
-- **Ctrl/Cmd + L**: Layout menu  
-- **Ctrl/Cmd + F**: Find entity in graph  
-- **Ctrl/Cmd + Mousewheel**: Zoom  
-- **Space**: Pan (hold)  
-- **Ctrl/Cmd + S**: Save
+- **Control sprawl:** expand selectively; use **filters** and **collection nodes**.  
+- **Color‑code/tag** entities by type or confidence level.  
+- Add **Notes** on entities and at the graph level to capture reasoning.  
+- Keep **API usage** in mind (throttling, quotas).  
+- Save often (`.mtgl`). Export **PNG/PDF** for slides; **CSV** for lists.  
 
 ---
 
-## Appendix B — Common Entities
+## Limits & Gotchas
 
-- **Infrastructure:** Domain, DNS Name, IP Address, Netblock, NS, MX, URL, Website, SSL Cert  
-- **People/Org:** Person, Email Address, Phone Number, Organization, Location  
-- **Content:** Document, Image, Social Profile, Username, Alias
+- CE limits entities/rate—perfect for training, not for large‑scale hunts.  
+- Public OSINT can be **noisy/incomplete**; verify with multiple sources.  
+- Graphs can explode in size—curate, collapse, and label to stay sane.  
+- Some high‑value transforms require **paid APIs** or licenses.
 
 ---
 
-## Appendix C — Suggested Lab Checklist
+## Ethics, Legal & OPSEC
 
-- [ ] Install and activate **Maltego CE**.  
+- Only investigate targets you **own or are authorized** to research.  
+- Respect **ToS** and **robots.txt**. Avoid disruptive queries during business hours.  
+- Record **what/when** you ran for reproducibility.  
+- Be mindful that transform providers may **log lookups**; plan OPSEC accordingly.
+
+---
+
+## Install (Quick Notes)
+
+- **Windows/macOS:** download the desktop installer from Maltego’s site.  
+- **Linux (e.g., Kali):** install from the distro or vendor package; launch from menu or CLI (`maltego`).  
+- **Sign in** with your Maltego account; enable sources in **Transform Hub**; add API keys as needed.
+
+---
+
+## Export & Collaboration
+
+- **Graph images:** PNG/SVG/PDF for reporting.  
+- **Entity tables:** CSV exports for IOC lists or spreadsheets.  
+- **Project files:** share `.mtgl` (ensure recipients have needed transforms).  
+- For teams, consider **shared transform servers** and agreed‑upon styles/notations.
+
+---
+
+## Glossary (Quick)
+
+- **Entity:** a typed node with properties.  
+- **Transform:** a scripted pivot from one entity to others.  
+- **Machine:** a chain of transforms (automation).  
+- **Transform Hub:** marketplace/config for data sources.  
+- **Collection Node:** cluster that groups many similar entities.  
+- **Layout:** algorithm to arrange nodes visually.
+
+---
+
+## Starter Checklist
+
+- [ ] Install desktop app and **sign in**.  
+- [ ] Open **Transform Hub**; enable a few core sources.  
+- [ ] Add any **API keys** (if you have them).  
 - [ ] Create a **new graph** and save it.  
-- [ ] Run **Footprint L1 (CE)** against your authorized domain.  
-- [ ] Run **URL → Network & Domain Info** for a known URL.  
-- [ ] Manually pivot from **Domain → DNS → IP → Netblock**.  
-- [ ] Export **PNG** of your graph and **CSV** of entities.  
-- [ ] Write a short findings note (what was discovered, what’s interesting, what needs follow‑up).
+- [ ] Run a **small** footprint or IOC expansion and export results.  
+- [ ] Write a short **findings** summary for your notes/report.
 
 ---
 
-## Changelog
+## Optional Assets
+
+If your repo includes demo materials, consider adding:
+- `/docs/MaltegoDemo.mp4` – short walkthrough of a domain footprint  
+- `/docs/screenshots/*.png` – before/after graph views  
+- `/cheatsheets/` – keyboard shortcuts, transform lists, style guide
+
+---
+
+### Changelog
 - August 24, 2025: Initial version.
