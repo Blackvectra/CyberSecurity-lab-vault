@@ -1,85 +1,110 @@
-# ethical-hacking-lab
-Red team home lab simulating Linux, Windows, and Web App attacks
-<p align="center">
-  <img src="banner.png" alt="Virtual Ethical Hacking Lab Banner">
-</p>
+# Virtual Ethical Hacking Home Lab
 
-# 🧨 Virtual Ethical Hacking Home Lab
-
-> Author: Matthew Levorson  
-> GitHub: [blackvectra](https://github.com/blackvectra)  
-> Brand: `nextlayersec`  
-> Certifications: ISC2 CC | CompTIA A+ | Security+ | (CySA+ in progress)
+> Author: Matthew Levorson
+> GitHub: [blackvectra](https://github.com/blackvectra)
+> Brand: NextLayerSec
+> Certifications: ISC2 CC | CompTIA A+ | Security+ | CySA+ (in progress)
 
 ---
 
-## 🧠 Purpose
+## Purpose
 
 This home lab was built to simulate ethical hacking and penetration testing across Linux, Windows, and Web Application targets using vulnerable systems and tools inside a fully isolated environment. The goal is to gain practical experience in real-world attack techniques, privilege escalation, lateral movement, persistence, and post-exploitation.
 
 ---
 
-## 💻 Environment Setup
+## Environment Setup
 
-| Component         | Details                                  |
-|------------------|-------------------------------------------|
-| Host OS          | Windows 11 Pro                            |
-| RAM              | 64GB                                      |
-| Storage          | 4TB SSD (Primary), 2TB C:\ Drive          |
-| Virtualization   | VMware Workstation 17.5                   |
-| Attacker Machine | Kali Linux (latest)                       |
-| Victim VMs       | Windows 10 (x2), Windows Server 2016 DC, Ubuntu Metasploitable |
+| Component | Details |
+|-----------|---------|
+| Host OS | Windows 11 Pro |
+| RAM | 64GB |
+| Storage | 4TB SSD (Primary), 2TB C:\ Drive |
+| Virtualization | VMware Workstation 17.5 |
+| Attacker Machine | Kali Linux (latest) |
+| Victim VMs | Windows 10 (x2), Windows Server 2016 DC, Ubuntu Metasploitable |
 
 ---
 
-## 🔐 Linux Pentesting
+## Linux Pentesting
 
-### 🔎 Reconnaissance
-Tools used:
-- `nmap`, `enum4linux`, `ftp`, `ssh`, `wget`
+### Reconnaissance
 
-Discovered:
+**Tools used:** `nmap`, `enum4linux`, `ftp`, `ssh`, `wget`
+
+**Discovered:**
 - Open Ports: 21 (FTP), 22 (SSH), 80 (HTTP), 139/445 (SMB), 3306 (MySQL)
 - Vulnerable Service: Samba with CVE-2007-6750 (Metasploit module: `usermap_script`)
 
-### 💥 Exploitation
+### Exploitation
+
 - Gained access via `ftp` using default creds: `vagrant:vagrant`
 - SSH used to log in after discovering same creds worked
 - Dumped `/etc/shadow`:
   ```bash
   cat /etc/shadow > hash.txt
-  Cracked hashes with john and hashcat
+  ```
+- Cracked hashes with `john` and `hashcat`
 
-🔼 Privilege Escalation via Docker Misconfig
+### Privilege Escalation via Docker Misconfig
 
-Used linPEAS to discover current user was in Docker group: docker run -it --rm -v /:/mnt ubuntu chroot /mnt bash
-Result: Full root access on host by using Docker to mount /
+Used `linPEAS` to discover current user was in Docker group:
 
-🪝 Persistence
-	•	Created a reverse shell payload (shell.sh)
-	•	Renamed to .backupd and placed in /usr/local/bin/
-	•	Used crontab -e to schedule execution
-	•	Set up listener: nc -lvnp 5555
- Compromised Passwords
-	•	Used john with rockyou.txt
-	•	Cracked: vagrant:vagrant and others
-	•	Full system takeover
+```bash
+docker run -it --rm -v /:/mnt ubuntu chroot /mnt bash
+```
 
-⸻
+**Result:** Full root access on host by using Docker to mount `/`
 
-🪟 Windows Pentesting
+### Persistence
 
-🔎 Reconnaissance
-	•	Network range: 192.168.42.0/24
-	•	Nmap scan revealed:
-	•	Open ports on DC1, Bob, and Alice’s computers
-	•	SMBv2 enabled
-	•	OS fingerprinting pointed to Windows Server and Windows 10
+- Created a reverse shell payload (`shell.sh`)
+- Renamed to `.backupd` and placed in `/usr/local/bin/`
+- Used `crontab -e` to schedule execution
+- Set up listener: `nc -lvnp 5555`
 
-💥 Exploitation (Responder)
-	1.	Used responder to capture NTLMv2 hash
-	2.	Social engineered user to connect to a fake share
-	3.	Cracked with:hashcat -m 5600 hash.txt rockyou.txt
+### Compromised Passwords
 
+- Used `john` with `rockyou.txt`
+- Cracked: `vagrant:vagrant` and others
+- Full system takeover
 
- ⚠️ Ethical notice: This lab was performed in a fully isolated virtual environment for educational purposes only.
+---
+
+## Windows Pentesting
+
+### Reconnaissance
+
+- Network range: `192.168.42.0/24`
+- Nmap scan revealed:
+  - Open ports on DC1, Bob, and Alice's computers
+  - SMBv2 enabled
+  - OS fingerprinting pointed to Windows Server and Windows 10
+
+### Exploitation (Responder)
+
+1. Used `responder` to capture NTLMv2 hash
+2. Social engineered user to connect to a fake share
+3. Cracked with:
+   ```bash
+   hashcat -m 5600 hash.txt rockyou.txt
+   ```
+
+---
+
+## Key Takeaways
+
+| Phase | Technique | Tool |
+|-------|-----------|------|
+| Reconnaissance | Port scanning, service enumeration | nmap, enum4linux |
+| Exploitation | Default credentials, SMB vulnerability | ftp, ssh, Metasploit |
+| Privilege Escalation | Docker group abuse | docker, linPEAS |
+| Persistence | Cron-based reverse shell | crontab, netcat |
+| Credential Access | Hash extraction and cracking | john, hashcat |
+| Lateral Movement | NTLMv2 capture and relay | Responder, hashcat |
+
+---
+
+## Ethical Notice
+
+> This lab was performed in a fully isolated virtual environment for educational purposes only. All techniques demonstrated here should only be used with proper authorization.
