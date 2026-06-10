@@ -7,6 +7,10 @@ A curated collection of cybersecurity labs, CTF guides, frameworks, and research
 
 ## Browse Labs & Guides
 
+### Lab Infrastructure
+- [Home Lab](./Home-Lab/README.md) -- SOC-style home lab: Defender, OPNsense, Cloudflare Gateway, VLAN segmentation, SIEM
+- [Home Lab Journal](./Home-Lab/journal/README.md) -- Raw working notes and troubleshooting scratchpad
+
 ### Offensive Security
 - [Penetration Testing](./Penetration-Testing/ethical-hacking-lab.md) -- Home lab with Linux, Windows, and web app attack scenarios
 - [Active Directory](./Active-Directory/README.md) -- AD enumeration, Kerberos attacks, credential access, lateral movement
