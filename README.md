@@ -37,6 +37,12 @@ CyberSecurity-lab-vault/
 |-- Cryptography/               # Cryptography challenges and labs
 |-- Enumeration/                # Enumeration and exploitation techniques
 |-- Forensics/                  # Digital forensics investigations
+|-- Home-Lab/                   # SOC-style home lab infrastructure (Defender, OPNsense, SIEM)
+|   |-- configs/                # Firewall, switch, and Cloudflare Gateway configs
+|   |-- defender-setup/         # Microsoft Defender for Business policies
+|   |-- siem-setup/             # SIEM architecture and detection rules
+|   |-- lessons-learned/        # Real-world issues and misconfigurations
+|   |-- journal/                # Raw working notes / scratchpad
 |-- Malicious-shared-object/    # LD_PRELOAD CTF techniques (educational)
 |   |-- basic-init-method/      # init() function approach
 |   |-- constructor-method/     # __attribute__((constructor)) approach
@@ -69,6 +75,7 @@ CyberSecurity-lab-vault/
 | **Web Application Security** | OWASP Top 10, injection, XSS, authentication bypass |
 | **Binary Exploitation** | LD_PRELOAD techniques, shared object injection (CTF context) |
 | **Defense & Detection** | Cyber Kill Chain mapping, KQL detections, coverage matrices |
+| **Home Lab Infrastructure** | SOC-style home lab: Defender, OPNsense, Cloudflare Gateway, VLAN segmentation, SIEM |
 
 ---
 
